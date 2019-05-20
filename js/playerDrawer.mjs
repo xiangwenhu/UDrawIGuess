@@ -49,7 +49,7 @@ export default class PlayerDrawer extends Drawer {
     if (this.mode === 1 && this.isDrawing) {
       super.drawMove(point);
       this.dispatch("mousemove", { point });
-    } else {
+    } else if (mode === 2) {
       super.clear(point);
       this.dispatch("mousemove", { point });
     }
