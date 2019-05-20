@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>你画我猜</title>
+    <link href="./css//style.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="cvsPaintContainer">
+        <canvas class="board" height="200" width="200"></canvas>
+    </div>
+
+    <script src="./js/lib/AgoraSig-1.4.0.js"></script>
+    <script src="./js/lib/EventEmitter.js"></script>
+    <script>
+        // 固定比例  95 ： 40
+        const width = document.documentElement.clientWidth * 0.95;
+        const height = ~~(document.documentElement.clientWidth * 0.5);
+
+        const canvasCol = document.querySelectorAll("canvas");
+        Array.from(canvasCol).forEach(function (c, index) {
+            c.height = height;
+            c.width = width;
+        })
+
+    </script>
+    <script type="module">
+        import GuessDrawer from "./js/guessDrawer.mjs"
+        import { GuessClient } from "./js/client.mjs"
+
+
+        const canvas = document.querySelector(".board");
+        const appid = "2b0eaef9a27f4e33909c9647219586dc";
+
+        var guessClient = new GuessClient(appid, undefined);
+        guessClient.init(Date.now(), undefined, 77777777).then(function () {
+
+            var emitter = new EventEmitter();
+
+            guessClient.signal.channelEmitter.on("onMessageChannelReceive", function (account, uid, msg) {
+                if (account !== guessClient.signal.account) {
+                    const data = JSON.parse(msg);
+                    emitter.emit(data.type, JSON.parse(data.data));
+                }
+            })
+            const guessDrawer = new GuessDrawer(canvas, emitter);
+
+        }).catch(err=>alert(err))
+
+     
+
+    </script>
+</body>
+
+</html>

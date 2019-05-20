@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>你画我猜</title>
+    <link href="./css//style.css" rel="stylesheet">
+</head>
+
+<body>
+
+
+    <div class="cvsPaintContainer">
+        <canvas class="board" height="200" width="200"></canvas>
+    </div>
+    <div>
+        <input id="widthRange" type="range" min="1" max="10" value="1">
+        <input type="button" value="橡皮" id="btnEraser" />
+        <input type="button" value="清屏" id="btnClear" />
+        <input name="color" type="button" class="jscolor" value="#000">
+    </div>
+    <div class="cvsPaintContainer">
+        <canvas class="board" height="200" width="200"></canvas>
+    </div>
+
+
+    <script src="./js/lib/jscolor.js"></script>
+    <script src="./js/lib/AgoraSig-1.4.0.js"></script>
+    <script src="./js/lib/EventEmitter.js"></script>
+    <script>
+
+        // 固定比例  95 ： 40
+        const width = document.documentElement.clientWidth * 0.95;
+        const height = ~~(document.documentElement.clientHeight * 0.4);
+
+        const canvasCol = document.querySelectorAll("canvas");
+        Array.from(canvasCol).forEach(function (c, index) {
+            c.height = height;
+            c.width = width;
+        })
+
+        canvasCol[1].width = width * 0.8;
+        canvasCol[1].height = height * 0.8;
+
+
+    </script>
+    <script type="module">
+        import { getMouseEventName } from "./js/util.mjs"
+        import PlayerDrawer from "./js/playerDrawer.mjs"
+        import GuessDrawer from "./js/guessDrawer.mjs"
+
+        const canvasCol = document.querySelectorAll("canvas");
+        const emitter = new EventEmitter();
+        const playerDrawer = new PlayerDrawer(canvasCol[0], emitter)
+        window.playerDrawer = playerDrawer;
+        const guessDrawer = new GuessDrawer(canvasCol[1], emitter)
+
+
+        // 字体大小
+        document.getElementById('widthRange').addEventListener("change", function (ev) {
+            playerDrawer.width = +ev.target.value;
+        })
+        // 橡皮擦
+        document.getElementById('btnEraser').addEventListener(getMouseEventName("click"), function (ev) {
+            const el = ev.target;
+            if (playerDrawer.mode === 1) {
+                playerDrawer.mode = 2;
+                el.style.backgroundColor = "lightcoral"
+            } else {
+                playerDrawer.mode = 1;
+                el.style.backgroundColor = "";
+            }
+        })
+        // 清屏
+        document.getElementById('btnClear').addEventListener(getMouseEventName("click"), function (ev) {
+            playerDrawer.clear();
+        })
+
+        const jsColorEl = document.querySelector(".jscolor");
+        window.jsColorEl = jsColorEl;
+
+        // 颜色选择
+        jsColorEl.addEventListener("change", function (ev) {
+            playerDrawer.color = ev.target.style.backgroundColor;
+        }, false)
+
+        // 关闭颜色选择
+        jsColorEl.addEventListener("blur", function () {
+            // jsColorEl.jscolor.hide()
+        })
+
+    </script>
+</body>
+
+</html>

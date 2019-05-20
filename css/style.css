@@ -1,0 +1,14 @@
+html, body {
+    margin: 0
+}
+
+.cvsPaintContainer {
+    width: 100vw;
+    text-align: center;
+    margin-top: 1vh;
+}
+
+.board {
+    border: 1px solid pink;
+    border-radius: 5px;
+}
