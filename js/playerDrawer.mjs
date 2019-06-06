@@ -6,12 +6,26 @@ export default class PlayerDrawer extends Drawer {
     super(canvas);
     this.emitter = emitter || new EventEmitter();
     // 1:绘制 2:擦除
-    this.mode = 1;
+    this._mode = 1;
+    this.isDrawing = false;
+    this.bgColor = "#FFF";
+    this.lineColor = "#000";
     this.init();
   }
 
   init() {
     this.registerEvents();
+  }
+
+  get mode() {
+    return this._mode;
+  }
+
+  set mode(value) {
+    this._mode = value;
+    if (this._mode === 2) {
+      this.setColor("#FFF");
+    }
   }
 
   registerEvents() {
@@ -30,9 +44,13 @@ export default class PlayerDrawer extends Drawer {
 
   onMouseDown(ev) {
     const point = getEventPoint(ev, this.rect);
-    if (this.mode === 1) {
+    if (this._mode === 1) {
+      this.isDrawing = true;
+      this.setColor(this.lineColor);
       super.drawStart(point);
     } else {
+      this.isDrawing = false;
+      this.setColor(this.bgColor);
       super.clear(point);
     }
     this.dispatch("mousedown", { point });
@@ -45,12 +63,14 @@ export default class PlayerDrawer extends Drawer {
   }
 
   onMouseMove(ev) {
+    console.log(this._mode, this.isDrawing);
     const point = getEventPoint(ev, this.rect);
-    if (this.mode === 1 && this.isDrawing) {
+    if (this._mode === 1 && this.isDrawing) {
       super.drawMove(point);
       this.dispatch("mousemove", { point });
-    } else if (this.mode === 2) {
-      super.clear(point);
+    } else if (this._mode === 2) {
+      // super.clear(point);
+      super.drawMove(point);
       this.dispatch("mousemove", { point });
     }
     ev.preventDefault();
@@ -86,7 +106,7 @@ export default class PlayerDrawer extends Drawer {
   }
 
   set color(value) {
-    super.setColor(value);
+    this.lineColor = value;
     this.dispatch("setColor", value);
   }
 
