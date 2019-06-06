@@ -23,9 +23,11 @@ export default class PlayerDrawer extends Drawer {
 
   set mode(value) {
     this._mode = value;
-    if (this._mode === 2) {
-      this.setColor("#FFF");
+    if (value === 2) {
+      this.setContext("globalCompositeOperation", "destination-out");
+      return;
     }
+    this.setContext("globalCompositeOperation", "source-over");
   }
 
   registerEvents() {
@@ -46,12 +48,11 @@ export default class PlayerDrawer extends Drawer {
     const point = getEventPoint(ev, this.rect);
     if (this._mode === 1) {
       this.isDrawing = true;
-      this.setColor(this.lineColor);
-      super.drawStart(point);
+      this.drawStart(point);
     } else {
       this.isDrawing = false;
-      this.setColor(this.bgColor);
-      super.clear(point);
+      this.drawStart(point);
+      //super.clear(point);
     }
     this.dispatch("mousedown", { point });
     ev.preventDefault();

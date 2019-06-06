@@ -23,6 +23,12 @@
 
     </div>
 
+    <div>
+        <input type="button" value="获取大小" id="btnGetSize" />
+
+
+    </div>
+
     <script src="./js/lib/jscolor.js"></script>
     <script src="./js/lib/EventEmitter.js"></script>
     <script src="./js/lib/AgoraSig-1.4.0.js"></script>
@@ -83,11 +89,32 @@
         var playerClient = new PlayerClient(appid, undefined);
         playerClient.signal.channelEmitter.on("onChannelUserJoined", function (account) {
 
-            sendMessage(account, {
-                type: "onJoin",
-                data: { url: playerDrawer.toDataURL("image/webp") }
+            var imgBase64 = playerDrawer.toDataURL("image/webp", 1);
+            var arrStr = strToArray(imgBase64);
+            var id = Date.now();
+
+            arrStr.forEach(function (str, index) {
+                sendMessage(account, {
+                    type: "onJoin",
+                    data: {
+                        id: id,
+                        length: arrStr.length,
+                        url: arrStr[index],
+                        index: index
+                    }
+                })
             })
+
         })
+
+        function strToArray(str, unitLength = 8000) {
+            var len = Math.ceil(str.length / unitLength);
+            var ret = [];
+            for (var i = 0; i < len; i++) {
+                ret.push(str.slice(i * unitLength, (i + 1) * unitLength))
+            }
+            return ret;
+        }
 
         function broadcastMessage(type) {
             return function (data) {
@@ -111,9 +138,46 @@
 
         }).catch(err => alert(err))
 
+    </script>
+
+    <script src="./js/lib/vconsole.min.js"></script>
+
+    <script>
+
+        var vConsole = new VConsole();
+        var board = document.querySelector(".board")
+
+
+        document.getElementById('btnGetSize').addEventListener("click", function () {
+            var imgWebp = board.toDataURL("image/webp", 1);
+            var imgPng = board.toDataURL("image/png", 1);
+
+
+            console.log(imgWebp.length);
+
+            console.log(imgPng.length);
+
+
+            var images = document.images;
+            for (let i = images.length - 1; i >= 0; i--) {
+                images[i].remove();
+            }
+
+
+            appendImage(imgWebp);
+            appendImage(imgPng);
+
+            function appendImage(imgBase64) {
+                var img = document.createElement("img");
+                img.src = imgBase64;
+                document.body.append(img);
+            }
+
+        })
 
 
     </script>
+
 </body>
 
 </html>

@@ -8,6 +8,12 @@ export default class Drawer {
     this.init();
   }
 
+  setContext(property, value) {
+    if (property in this.ctx) {
+      this.ctx[property] = value;
+    }
+  }
+
   setColor(color) {
     this.strokeStyle = color;
   }
