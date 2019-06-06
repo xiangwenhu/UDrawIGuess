@@ -16,11 +16,24 @@ export default class GuessDrawer extends Drawer {
     if (!this.emitter) {
       return;
     }
+    this.emitter.on("onJoin", this.onJoin.bind(this));
     this.emitter.on("mousedown", this.onMouseDown.bind(this));
     this.emitter.on("mousemove", this.onMouseMove.bind(this));
     this.emitter.on("setColor", this.onSetColor.bind(this));
     this.emitter.on("setWidth", this.onSetWidth.bind(this));
     this.emitter.on("clear", this.onClear.bind(this));
+  }
+
+  onJoin(imgbase64) {
+    var that = this;
+    var img = new Image();
+    img.src = imgbase64;
+    img.style = "display:none";
+    document.body.appendChild(img);
+    img.onload = function() {
+      that.drawImage(img, 0, 0);
+      //img.remove();
+    };
   }
 
   onMouseDown({ point, mode, width }) {

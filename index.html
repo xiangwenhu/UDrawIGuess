@@ -43,7 +43,6 @@
     <script type="module">
         import { getMouseEventName } from "./js/util.mjs"
         import PlayerDrawer from "./js/playerDrawer.mjs"
-        import GuessDrawer from "./js/guessDrawer.mjs"
         import { PlayerClient } from "./js/client.mjs"
 
         const canvasCol = document.querySelectorAll(".board");
@@ -82,20 +81,35 @@
         const appid = "2b0eaef9a27f4e33909c9647219586dc";
 
         var playerClient = new PlayerClient(appid, undefined);
+        playerClient.signal.channelEmitter.on("onChannelUserJoined", function (account) {
+
+            sendMessage(account, {
+                type: "onJoin",
+                data: { url: playerDrawer.toDataURL() }
+            })
+        })
+
+        function broadcastMessage(type) {
+            return function (data) {
+                playerClient.broadcast({ type, data: JSON.stringify(data) })
+            }
+        }
+
+        function sendMessage(account, data) {
+            playerClient.send(account, data)
+        }
+
         playerClient.init(11111111, undefined, 77777777).then(function () {
 
-            function sendMessage(type) {
-                return function (data) {
-                    playerClient.broadcast({ type, data: JSON.stringify(data) })
-                }
-            }
 
-            playerDrawer.on("mousedown", sendMessage("mousedown"));
-            playerDrawer.on("mousemove", sendMessage("mousemove"));
-            playerDrawer.on("setColor", sendMessage("setColor"));
-            playerDrawer.on("setWidth", sendMessage("setWidth"));
-            playerDrawer.on("clear", sendMessage("clear"));
-        }).catch(err=>alert(err))
+            playerDrawer.on("mousedown", broadcastMessage("mousedown"));
+            playerDrawer.on("mousemove", broadcastMessage("mousemove"));
+            playerDrawer.on("setColor", broadcastMessage("setColor"));
+            playerDrawer.on("setWidth", broadcastMessage("setWidth"));
+            playerDrawer.on("clear", broadcastMessage("clear"));
+
+
+        }).catch(err => alert(err))
 
 
 

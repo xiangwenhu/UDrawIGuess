@@ -60,4 +60,18 @@ export default class Drawer {
       this.ctx.stroke();
     }
   }
+
+  toDataURL(type, quality) {
+    return this.canvas.toDataURL(type || "image/png", quality | 0.75);
+  }
+
+  drawImage(img, x, y, width, height) {
+    this.ctx.drawImage(
+      img,
+      x,
+      y,
+      width | this.canvas.width,
+      height | this.canvas.height
+    );
+  }
 }

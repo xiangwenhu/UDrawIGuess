@@ -20,6 +20,10 @@ export class PlayerClient extends Client {
   broadcast(msg) {
     this.signal.broadcastMessage(JSON.stringify(msg));
   }
+
+  send(account, msg) {
+    this.signal.sendMessage(account, JSON.stringify(msg));
+  }
 }
 
 export class GuessClient extends Client {
