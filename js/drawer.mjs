@@ -25,6 +25,8 @@ export default class Drawer {
       this.ctx.clearRect(0, 0, wh.width, wh.height);
     } else {
       ctx.save();
+      ctx.lineCap = "square";
+      ctx.lineJoin = "square";
       ctx.beginPath();
       ctx.arc(point.x, point.y, this.lineWidth, 0, Math.PI * 2, false);
       ctx.clip();
