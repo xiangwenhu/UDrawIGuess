@@ -45,8 +45,8 @@ export function getEventPoint(ev, rect) {
     };
   }
   return {
-    x: touch.clientX - offset.left,
-    y: touch.clientY - offset.top
+    x: ~~(touch.clientX - offset.left) + 0.5,
+    y: ~~(touch.clientY - offset.top) + 0.5
   };
 }
 

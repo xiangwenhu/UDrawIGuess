@@ -8,6 +8,18 @@ export default class Drawer {
     this.init();
   }
 
+  init() {
+    /*     var canvas = this.canvas;
+    var rate = this.getPixelRatio();
+    this.canvas.width = this.canvas.width * this.getPixelRatio();
+    this.canvas.height = this.canvas.height * this.getPixelRatio();
+    // this.ctx.scale(1 / rate, 1 / rate);
+    canvas.style.transformOrigin = "0 0"; //scale from top left
+    // canvas.style.transform = "scale(" + 1 / rate + ")"; */
+
+    this.ctx.imageSmoothingEnabled = true;
+  }
+
   getPixelRatio() {
     var ctx = this.ctx;
     var backingStore =
@@ -66,7 +78,7 @@ export default class Drawer {
     ctx.lineCap = "round";
     ctx.lineJoin = "round";
     ctx.lineTo(point.x, point.y);
-    ctx.stroke(); //画一个点
+    // ctx.stroke(); //画一个点
   }
 
   drawMove(point) {

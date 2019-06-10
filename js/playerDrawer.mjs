@@ -14,6 +14,7 @@ export default class PlayerDrawer extends Drawer {
   }
 
   init() {
+    super.init();
     this.registerEvents();
   }
 
@@ -64,8 +65,9 @@ export default class PlayerDrawer extends Drawer {
   }
 
   onMouseMove(ev) {
-    console.log(this._mode, this.isDrawing);
     const point = getEventPoint(ev, this.rect);
+    console.log(this._mode, this.isDrawing, point);
+
     if (this._mode === 1 && this.isDrawing) {
       super.drawMove(point);
       this.dispatch("mousemove", { point });
