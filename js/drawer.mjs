@@ -8,6 +8,19 @@ export default class Drawer {
     this.init();
   }
 
+  getPixelRatio() {
+    var ctx = this.ctx;
+    var backingStore =
+      ctx.backingStorePixelRatio ||
+      ctx.webkitBackingStorePixelRatio ||
+      ctx.mozBackingStorePixelRatio ||
+      ctx.msBackingStorePixelRatio ||
+      ctx.oBackingStorePixelRatio ||
+      ctx.backingStorePixelRatio ||
+      1;
+    return (window.devicePixelRatio || 1) / backingStore;
+  }
+
   setContext(property, value) {
     if (property in this.ctx) {
       this.ctx[property] = value;
@@ -57,10 +70,9 @@ export default class Drawer {
   }
 
   drawMove(point) {
-    this.ctx.lineTo(point.x, point.y);
-    this.ctx.strokeStyle = this.strokeStyle;
-    this.ctx.lineWidth = this.lineWidth;
-    this.ctx.stroke();
+    var ctx = this.ctx;
+    ctx.lineTo(point.x, point.y);
+    ctx.stroke();
   }
 
   toDataURL(type, quality) {

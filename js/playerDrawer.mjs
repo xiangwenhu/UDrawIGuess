@@ -107,7 +107,7 @@ export default class PlayerDrawer extends Drawer {
   }
 
   set color(value) {
-    this.lineColor = value;
+    super.setColor(value);
     this.dispatch("setColor", value);
   }
 
