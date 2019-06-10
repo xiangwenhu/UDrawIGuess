@@ -10,6 +10,7 @@ export default class PlayerDrawer extends Drawer {
     this.isDrawing = false;
     this.bgColor = "#FFF";
     this.lineColor = "#000";
+    this.lastPoint = null;
     this.init();
   }
 
@@ -55,6 +56,7 @@ export default class PlayerDrawer extends Drawer {
       this.drawStart(point);
       //super.clear(point);
     }
+    this.lastPoint = point;
     this.dispatch("mousedown", { point });
     ev.preventDefault();
   }
@@ -76,6 +78,7 @@ export default class PlayerDrawer extends Drawer {
       super.drawMove(point);
       this.dispatch("mousemove", { point });
     }
+    this.lastPoint = point;
     ev.preventDefault();
   }
 

@@ -4,7 +4,7 @@ export default class Drawer {
     this.ctx = canvas.getContext("2d");
     this.rect = canvas.getBoundingClientRect();
     this.strokeStyle = "#000";
-    this.lineWidth = 1;
+    this.lineWidth = 2;
     this.init();
   }
 
@@ -84,6 +84,12 @@ export default class Drawer {
   drawMove(point) {
     var ctx = this.ctx;
     ctx.lineTo(point.x, point.y);
+    ctx.stroke();
+  }
+
+  arcTo(point1, point2, radius) {
+    var ctx = this.ctx;
+    ctx.arcTo(point1.x, point1.y, point2.x, point2.y, radius);
     ctx.stroke();
   }
 
