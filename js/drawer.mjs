@@ -106,4 +106,10 @@ export default class Drawer {
       height | this.canvas.height
     );
   }
+
+  quadraticCurveTo(cpx, cpy, x, y) {
+    var ctx = this.ctx;
+    ctx.quadraticCurveTo(cpx, cpy, x, y);
+    ctx.stroke();
+  }
 }

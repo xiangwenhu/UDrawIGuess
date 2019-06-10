@@ -22,4 +22,5 @@ canvas中的点用贝斯曲线连接成光滑曲线（解决移动端画布模�
 https://blog.csdn.net/qq_39635302/article/details/79477553   
 https://blog.csdn.net/weixin_40346046/article/details/78766141   
 https://www.jb51.net/html5/641000.html   
-https://www.lizhiqianduan.com/blog/index.php/2019/02/26/javascript-how-to-smooth-line/
+https://www.lizhiqianduan.com/blog/index.php/2019/02/26/javascript-how-to-smooth-line/   
+https://stackoverflow.com/questions/7054272/how-to-draw-smooth-curve-through-n-points-using-javascript-html5-canvas

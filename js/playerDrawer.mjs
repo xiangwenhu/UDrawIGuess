@@ -10,7 +10,7 @@ export default class PlayerDrawer extends Drawer {
     this.isDrawing = false;
     this.bgColor = "#FFF";
     this.lineColor = "#000";
-    this.lastPoint = null;
+    this.points = [];
     this.init();
   }
 
@@ -56,20 +56,20 @@ export default class PlayerDrawer extends Drawer {
       this.drawStart(point);
       //super.clear(point);
     }
-    this.lastPoint = point;
+    this.points.push(point);
     this.dispatch("mousedown", { point });
     ev.preventDefault();
   }
 
   onMouseUp(ev) {
     this.isDrawing = false;
+    //this.drawCurve();
+    //this.points = [];
     this.dispatch("mouseup");
   }
 
   onMouseMove(ev) {
     const point = getEventPoint(ev, this.rect);
-    console.log(this._mode, this.isDrawing, point);
-
     if (this._mode === 1 && this.isDrawing) {
       super.drawMove(point);
       this.dispatch("mousemove", { point });
@@ -78,7 +78,7 @@ export default class PlayerDrawer extends Drawer {
       super.drawMove(point);
       this.dispatch("mousemove", { point });
     }
-    this.lastPoint = point;
+    this.points.push(point);
     ev.preventDefault();
   }
 
@@ -104,6 +104,25 @@ export default class PlayerDrawer extends Drawer {
       }
       this.emitter.emit(type, data, ...args);
     }
+  }
+
+  drawCurve() {
+    var points = this.points;
+    var ctx = this.ctx;
+
+    ctx.moveTo(points[0].x, points[0].y);
+    for (var i = 1; i < points.length - 2; i++) {
+      var xc = (points[i].x + points[i + 1].x) / 2;
+      var yc = (points[i].y + points[i + 1].y) / 2;
+      super.quadraticCurveTo(points[i].x, points[i].y, xc, yc);
+    }
+
+    super.quadraticCurveTo(
+      points[i].x,
+      points[i].y,
+      points[i + 1].x,
+      points[i + 1].y
+    );
   }
 
   clear(point) {
