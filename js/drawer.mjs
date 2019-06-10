@@ -4,7 +4,7 @@ export default class Drawer {
     this.ctx = canvas.getContext("2d");
     this.rect = canvas.getBoundingClientRect();
     this.strokeStyle = "#000";
-    this.lineWidth = 2;
+    this.lineWidth = 1;
     this.init();
   }
 
@@ -16,6 +16,13 @@ export default class Drawer {
     // this.ctx.scale(1 / rate, 1 / rate);
     canvas.style.transformOrigin = "0 0"; //scale from top left
     // canvas.style.transform = "scale(" + 1 / rate + ")"; */
+
+    this.setContexts({
+      shadowColor: "#000",
+      shadowBlur: 0.25,
+      shadowOffsetX: 0,
+      shadowOffsetY: 0.25
+    });
 
     this.ctx.imageSmoothingEnabled = true;
   }
@@ -33,6 +40,12 @@ export default class Drawer {
     return (window.devicePixelRatio || 1) / backingStore;
   }
 
+  setContexts(kv) {
+    for (var p in kv) {
+      this.setContext(p, kv[p]);
+    }
+  }
+
   setContext(property, value) {
     if (property in this.ctx) {
       this.ctx[property] = value;
@@ -41,6 +54,8 @@ export default class Drawer {
 
   setColor(color) {
     this.strokeStyle = color;
+    // this.setContext("shadowColor", color);
+    this.ctx.shadowColor = color;
   }
 
   setWidth(width) {
