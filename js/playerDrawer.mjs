@@ -1,5 +1,6 @@
 import Drawer from "./drawer.mjs";
 import { getEventPoint, eventsName } from "./util.mjs";
+import browser from "./browser.mjs";
 
 export default class PlayerDrawer extends Drawer {
   constructor(canvas, emitter) {
@@ -44,6 +45,24 @@ export default class PlayerDrawer extends Drawer {
         this.isDrawing = false;
       }
     });
+
+    var info = browser();
+    var rate = super.getPixelRatio();
+    if (info.isPC) {
+      this.setContexts({
+        shadowColor: "#000",
+        shadowBlur: rate,
+        shadowOffsetX: 0,
+        shadowOffsetY: 1
+      });
+    }
+  }
+
+  transformPoint(point) {
+    return {
+      x: point.x * window.devicePixelRatio,
+      y: point.y * window.devicePixelRatio
+    };
   }
 
   onMouseDown(ev) {

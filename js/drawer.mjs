@@ -5,24 +5,29 @@ export default class Drawer {
     this.rect = canvas.getBoundingClientRect();
     this.strokeStyle = "#000";
     this.lineWidth = 1;
-    this.init();
   }
 
   init() {
-    /*     var canvas = this.canvas;
     var rate = this.getPixelRatio();
-    this.canvas.width = this.canvas.width * this.getPixelRatio();
-    this.canvas.height = this.canvas.height * this.getPixelRatio();
-    // this.ctx.scale(1 / rate, 1 / rate);
-    canvas.style.transformOrigin = "0 0"; //scale from top left
-    // canvas.style.transform = "scale(" + 1 / rate + ")"; */
+    var canvas = this.canvas;
+    var ctx = this.ctx;
+    let width = canvas.width,
+      height = canvas.height;
+    if (rate > 1) {
+      canvas.style.width = width + "px";
+      canvas.style.height = height + "px";
+      canvas.height = height * rate;
+      canvas.width = width * rate;
+      ctx.scale(rate, rate);
+    }
 
+    /*
     this.setContexts({
       shadowColor: "#000",
-      shadowBlur: 0.25,
+      shadowBlur: rate,
       shadowOffsetX: 0,
-      shadowOffsetY: 0.25
-    });
+      shadowOffsetY: 1
+    }); */
 
     this.ctx.imageSmoothingEnabled = true;
   }
