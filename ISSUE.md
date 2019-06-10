@@ -1,16 +1,19 @@
   
-* [ ] 断线重连，同步与绘制的问题
-    canvas.toDataURL png 传递， 大小限制，分批传。   
-    webp格式   
-    绘画者断开，需要定时备份。
+* [x] 断线重连，同步与绘制的问题   
+    观看者： 1. canvas.toDataURL png/webp 传递， 大小限制，分批传。（验证通过）   2. lineWidth, color传递  
+    绘画者： 绘画者断开，需要定时备份。
+
+* [x] 橡皮檫问题    
+  1. globalCompositeOperation:destination-out (采用)   
+  2. 几何计算
+   
 
 * [ ] 画笔大小和画布大小？ resize的问题 ？ 
    绘画者 / 观看者 比例 进行统一调制
 
-* [ ] 橡皮檫问题    
-  几何计算
-* [ ] 线不清楚问题   
-   1. beginPath closePath
+
+* [x] 线条不清楚问题（锯齿，毛边）   
+   1. **devicePixelRatio + context.scale (采用生效)**   
    2. 绘制时计算px   
    3. 画线时将坐标取整后加上0.5。原因是canvas在绘制的时候，整数点坐标在屏幕像素的中间点，绘制的时候，线条会俩边都占一半，在视觉上看起来是俩个像素的效果。（写基础方法的时候做下处理）
    4. 设置canvas的宽高后，绘制完图形后再scale缩小。

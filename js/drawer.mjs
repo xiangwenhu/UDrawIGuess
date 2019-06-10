@@ -1,3 +1,5 @@
+import { getSize } from "./util.mjs";
+
 export default class Drawer {
   constructor(canvas) {
     this.canvas = canvas;
@@ -20,7 +22,6 @@ export default class Drawer {
       canvas.width = width * rate;
       ctx.scale(rate, rate);
     }
-
     /*
     this.setContexts({
       shadowColor: "#000",
@@ -30,6 +31,15 @@ export default class Drawer {
     }); */
 
     this.ctx.imageSmoothingEnabled = true;
+  }
+
+  reset(width, height) {
+    var rate = this.getPixelRatio();
+    var canvas = this.canvas;
+    var ctx = this.ctx;
+    canvas.height = height * rate;
+    canvas.width = width * rate;
+    ctx.scale(rate, rate);
   }
 
   getPixelRatio() {
@@ -63,8 +73,16 @@ export default class Drawer {
     this.ctx.shadowColor = color;
   }
 
-  setWidth(width) {
+  setLineWith(width) {
     this.lineWidth = width;
+  }
+
+  getColor() {
+    return this.strokeStyle;
+  }
+
+  getLineWith() {
+    return this.lineWidth;
   }
 
   clear(point) {
@@ -87,6 +105,10 @@ export default class Drawer {
       height: this.canvas.height,
       width: this.canvas.width
     };
+  }
+
+  getCSSWH() {
+    return getSize(this.canvas);
   }
 
   drawStart(point) {
@@ -117,14 +139,18 @@ export default class Drawer {
     return this.canvas.toDataURL(type || "image/png", quality | 0.75);
   }
 
-  drawImage(img, x, y, width, height) {
-    this.ctx.drawImage(
-      img,
-      x,
-      y,
-      width | this.canvas.width,
-      height | this.canvas.height
-    );
+  drawImage(img, x, y, width, height, dx, dy, dWidth, dHeight) {
+    if (dx == null && dWidth == null) {
+      this.ctx.drawImage(
+        img,
+        x,
+        y,
+        width | this.canvas.width,
+        height | this.canvas.height
+      );
+      return;
+    }
+    this.ctx.drawImage(img, x, y, width, height, dx, dy, dWidth, dHeight);
   }
 
   quadraticCurveTo(cpx, cpy, x, y) {

@@ -73,3 +73,15 @@ export function getOffset(node) {
     left: offset.left + window.pageXOffset - docElement.clientLeft
   };
 }
+
+export function getSize(el) {
+  var ps = window.getComputedStyle(el);
+  return {
+    height: pxToNumer(ps.height),
+    width: pxToNumer(ps.width)
+  };
+}
+
+function pxToNumer(str) {
+  return +str.replace("px", "");
+}

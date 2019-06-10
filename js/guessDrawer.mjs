@@ -1,14 +1,16 @@
 import Drawer from "./drawer.mjs";
-import { getEventPoint, eventsName } from "./util.mjs";
 
 export default class GuessDrawer extends Drawer {
   constructor(canvas, emitter) {
     super(canvas);
     this.emitter = emitter;
     this.init();
+    this.playerOption = null;
+    this.sizeRate = 1;
   }
 
   init() {
+    super.init();
     this.registerEvents();
   }
 
@@ -17,22 +19,47 @@ export default class GuessDrawer extends Drawer {
       return;
     }
     this.emitter.on("onJoin", this.onJoin.bind(this));
+    this.emitter.on("onMirror", this.onMirror.bind(this));
     this.emitter.on("mousedown", this.onMouseDown.bind(this));
     this.emitter.on("mousemove", this.onMouseMove.bind(this));
     this.emitter.on("setColor", this.onSetColor.bind(this));
-    this.emitter.on("setWidth", this.onSetWidth.bind(this));
+    this.emitter.on("setLineWith", this.onsetLineWith.bind(this));
     this.emitter.on("clear", this.onClear.bind(this));
   }
 
-  onJoin(imgbase64) {
+  onJoin(option) {
+    this.playerOption = option;
+    // this.sizeRate = this.getCSSWH().width / option.width;
+    this.setColor(option.color);
+    this.setLineWith(option.lineWith);
+    this.reset(option.width, option.height);
+  }
+
+  onMirror(imgbase64) {
     var that = this;
     var img = new Image();
     img.src = imgbase64;
     img.style = "display:none";
     document.body.appendChild(img);
+    var size = this.getCSSWH();
+    var pixelRatio = this.getPixelRatio();
+    var sourcePixelRatio = this.playerOption.pixelRatio;
+
+    // 比例
+    var rate = this.playerOption.width / size.width;
     img.onload = function() {
-      that.drawImage(img, 0, 0);
-      //img.remove();
+      that.drawImage(
+        img,
+        0,
+        0,
+        img.width,
+        img.height,
+        0,
+        0,
+        size.width * rate,
+        size.height * rate
+      );
+      // img.remove();
     };
   }
 
@@ -58,23 +85,15 @@ export default class GuessDrawer extends Drawer {
     super.setColor(color);
   }
 
-  onSetWidth(width) {
-    super.setWidth(width);
+  onsetLineWith(width) {
+    super.setLineWith(width);
   }
 
   onClear({ point }) {
     super.clear(point);
   }
 
-  getComputedPoint(point, sourceWith) {
-    if (!sourceWith) {
-      return point;
-    }
-    const width = this.canvas.width;
-    const percent = width / sourceWith;
-    return {
-      x: percent * point.x,
-      y: percent * point.y
-    };
+  getComputedPoint(point) {
+    return point;
   }
 }

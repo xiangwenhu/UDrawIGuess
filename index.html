@@ -89,13 +89,29 @@
         var playerClient = new PlayerClient(appid, undefined);
         playerClient.signal.channelEmitter.on("onChannelUserJoined", function (account) {
 
+
+            var cssWH = playerDrawer.getCSSWH();
+            var canvasWH = playerDrawer.getWH();
+            // 画笔大小，颜色等传递
+            sendMessage(account, {
+                type: "onJoin",
+                data: {
+                    pixelRatio: playerDrawer.getPixelRatio(),
+                    width: cssWH.width,
+                    height: cssWH.height,
+                    color: playerDrawer.getColor(),
+                    lineWidth: playerDrawer.getLineWith()
+                }
+            })
+
+
             var imgBase64 = playerDrawer.toDataURL("image/webp", 1);
             var arrStr = strToArray(imgBase64);
             var id = Date.now();
 
             arrStr.forEach(function (str, index) {
                 sendMessage(account, {
-                    type: "onJoin",
+                    type: "onMirror",
                     data: {
                         id: id,
                         length: arrStr.length,
@@ -132,7 +148,7 @@
             playerDrawer.on("mousedown", broadcastMessage("mousedown"));
             playerDrawer.on("mousemove", broadcastMessage("mousemove"));
             playerDrawer.on("setColor", broadcastMessage("setColor"));
-            playerDrawer.on("setWidth", broadcastMessage("setWidth"));
+            playerDrawer.on("setLineWith", broadcastMessage("setLineWith"));
             playerDrawer.on("clear", broadcastMessage("clear"));
 
 

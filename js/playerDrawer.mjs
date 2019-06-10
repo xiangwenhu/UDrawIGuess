@@ -155,7 +155,7 @@ export default class PlayerDrawer extends Drawer {
   }
 
   set width(value) {
-    super.setWidth(value);
-    this.dispatch("setWidth", value);
+    super.setLineWith(value);
+    this.dispatch("setLineWith", value);
   }
 }
