@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Canvas测试</title>
+    <style>
+        #cv {
+            width: 150px;
+            height: 150px;
+        }
+
+        .cv{
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+
+    <canvas id="cv" width="600" height="300" class="cv"></canvas>
+
+
+    <script>
+
+        var canvas = document.getElementById("cv"),
+            ctx = canvas.getContext('2d');
+        ctx.moveTo(0, 0);
+        ctx.lineTo(600, 300);
+        ctx.stroke();
+    </script>
+
+
+
+
+</body>
+
+</html>

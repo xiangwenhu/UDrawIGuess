@@ -6,6 +6,7 @@ html, body {
     width: 100vw;
     text-align: center;
     margin-top: 1vh;
+    margin-top: 20px;
 }
 
 .board {
