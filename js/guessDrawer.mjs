@@ -29,10 +29,10 @@ export default class GuessDrawer extends Drawer {
 
   onJoin(option) {
     this.playerOption = option;
-    // this.sizeRate = this.getCSSWH().width / option.width;
+    this.sizeRate = this.getCSSWH().width / option.width;
+
     this.setColor(option.color);
-    this.setLineWith(option.lineWith);
-    this.reset(option.width, option.height);
+    this.setLineWith(option.lineWidth * this.sizeRate);
   }
 
   onMirror(imgbase64) {
@@ -42,11 +42,6 @@ export default class GuessDrawer extends Drawer {
     img.style = "display:none";
     document.body.appendChild(img);
     var size = this.getCSSWH();
-    var pixelRatio = this.getPixelRatio();
-    var sourcePixelRatio = this.playerOption.pixelRatio;
-
-    // 比例
-    var rate = this.playerOption.width / size.width;
     img.onload = function() {
       that.drawImage(
         img,
@@ -56,10 +51,10 @@ export default class GuessDrawer extends Drawer {
         img.height,
         0,
         0,
-        size.width * rate,
-        size.height * rate
+        size.width,
+        size.height
       );
-      // img.remove();
+      img.remove();
     };
   }
 
@@ -86,7 +81,7 @@ export default class GuessDrawer extends Drawer {
   }
 
   onsetLineWith(width) {
-    super.setLineWith(width);
+    super.setLineWith(width * this.sizeRate);
   }
 
   onClear({ point }) {
@@ -94,6 +89,10 @@ export default class GuessDrawer extends Drawer {
   }
 
   getComputedPoint(point) {
-    return point;
+    var sizeRate = this.sizeRate;
+    return {
+      x: point.x * sizeRate,
+      y: point.y * sizeRate
+    };
   }
 }

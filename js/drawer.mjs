@@ -13,7 +13,7 @@ export default class Drawer {
     var rate = this.getPixelRatio();
     var canvas = this.canvas;
     var ctx = this.ctx;
-    let width = canvas.width,
+    var width = canvas.width,
       height = canvas.height;
     if (rate > 1) {
       canvas.style.width = width + "px";
@@ -36,6 +36,8 @@ export default class Drawer {
   reset(width, height) {
     var rate = this.getPixelRatio();
     var canvas = this.canvas;
+    canvas.style.width = canvas.width + "px";
+    canvas.style.height = canvas.height + "px";
     var ctx = this.ctx;
     canvas.height = height * rate;
     canvas.width = width * rate;
