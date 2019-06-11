@@ -1,7 +1,7 @@
   
 * [x] 断线重连，同步与绘制的问题   
-    观看者： 1. canvas.toDataURL png/webp 传递， 大小限制，分批传。（验证通过）   2. lineWidth, color传递  
-    绘画者： 绘画者断开，需要定时备份。
+    观看者： 1. canvas.toDataURL png/webp 传递， 大小限制，分批传。（验证通过）   2. lineWidth, color, width传递  
+    绘画者： 绘画者断开，需要定时备份。(计时器 + localStorage/indexDB)
 
 * [x] 橡皮檫问题    
   1. globalCompositeOperation:destination-out (采用)   
