@@ -1,6 +1,7 @@
 import Drawer from "./drawer.mjs";
 import { getEventPoint, eventsName } from "./util.mjs";
 import browser from "./browser.mjs";
+import LSStore from "./lsStore.mjs";
 
 export default class PlayerDrawer extends Drawer {
   constructor(canvas, emitter) {
@@ -12,12 +13,45 @@ export default class PlayerDrawer extends Drawer {
     this.bgColor = "#FFF";
     this.lineColor = "#000";
     this.points = [];
+    this.ls = new LSStore();
     this.init();
   }
 
   init() {
     super.init();
     this.registerEvents();
+    this.restore();
+    this.ls.start(this.backUp.bind(this));
+  }
+
+  restore() {
+    const imgBase64 = this.ls.getData();
+    if (imgBase64) {
+      var img = new Image();
+      img.src = imgBase64;
+      img.style = "display:none";
+      document.body.appendChild(img);
+      var size = this.getCSSWH();
+      var that = this;
+      img.onload = function() {
+        that.drawImage(
+          img,
+          0,
+          0,
+          img.width,
+          img.height,
+          0,
+          0,
+          size.width,
+          size.height
+        );
+        img.remove();
+      };
+    }
+  }
+
+  backUp() {
+    return this.toDataURL("image/webp", 0.92);
   }
 
   get mode() {
@@ -56,13 +90,6 @@ export default class PlayerDrawer extends Drawer {
         shadowOffsetY: 1
       });
     }
-  }
-
-  transformPoint(point) {
-    return {
-      x: point.x * window.devicePixelRatio,
-      y: point.y * window.devicePixelRatio
-    };
   }
 
   onMouseDown(ev) {
@@ -146,6 +173,7 @@ export default class PlayerDrawer extends Drawer {
 
   clear(point) {
     super.clear(point);
+    this.ls.clear();
     this.dispatch("clear", { point });
   }
 
