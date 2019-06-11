@@ -81,7 +81,7 @@ export default class GuessDrawer extends Drawer {
   }
 
   onsetLineWith(width) {
-    super.setLineWith(width * this.sizeRate);
+    super.setLineWith(Math.max(1, width * this.sizeRate));
   }
 
   onClear({ point }) {
